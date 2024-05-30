@@ -5,3 +5,4 @@ spring:
     username: root
     password: root
   batch.jdbc.initialize-schema: always
+
