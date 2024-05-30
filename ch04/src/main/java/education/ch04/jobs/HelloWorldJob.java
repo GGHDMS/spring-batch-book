@@ -1,5 +1,7 @@
 package education.ch04.jobs;
 
+import education.ch04.batch.DailyJobTimestamper;
+import education.ch04.batch.JobLoggerListener;
 import education.ch04.batch.ParameterValidator;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -7,7 +9,6 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.CompositeJobParametersValidator;
 import org.springframework.batch.core.job.DefaultJobParametersValidator;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -38,7 +39,7 @@ public class HelloWorldJob {
         DefaultJobParametersValidator defaultJobParametersValidator =
                 new DefaultJobParametersValidator(
                         new String[]{"fileName"},
-                        new String[]{"name", "run.id"});
+                        new String[]{"name", "currentTime"});
 
         defaultJobParametersValidator.afterPropertiesSet();
 
@@ -55,7 +56,7 @@ public class HelloWorldJob {
         return new JobBuilder("basicJob", jobRepository)
                 .start(step())
                 .validator(validator())
-                .incrementer(new RunIdIncrementer())
+                .incrementer(new DailyJobTimestamper())
                 .build();
     }
 
