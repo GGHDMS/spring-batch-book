@@ -9,13 +9,12 @@ import org.springframework.batch.core.step.tasklet.CallableTaskletAdapter;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.concurrent.Callable;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class CallableTaskletConfiguration {
 
     @Autowired
