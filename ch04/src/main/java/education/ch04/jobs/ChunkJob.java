@@ -1,5 +1,6 @@
 package education.ch04.jobs;
 
+import education.ch04.batch.LoggingStepStartStopListener;
 import education.ch04.batch.RandomChunkSizePolicy;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -14,7 +15,6 @@ import org.springframework.batch.repeat.policy.SimpleCompletionPolicy;
 import org.springframework.batch.repeat.policy.TimeoutTerminationPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class ChunkJob {
 
     @Autowired
@@ -46,6 +46,7 @@ public class ChunkJob {
                 .<String, String>chunk(randomCompletionPolicy(), transactionManager)
                 .reader(itemReader())
                 .writer(itemWriter())
+                .listener(new LoggingStepStartStopListener())
                 .build();
     }
 
