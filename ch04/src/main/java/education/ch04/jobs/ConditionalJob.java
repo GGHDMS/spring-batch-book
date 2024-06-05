@@ -51,7 +51,7 @@ public class ConditionalJob {
     public Job job() {
         return new JobBuilder("conditionalJob", jobRepository)
                 .start(firstStep())
-                .on("FAILED").fail()
+                .on("FAILED").stopAndRestart(successStep())
                 .from(firstStep()).on("*").to(successStep())
                 .end()
                 .build();
