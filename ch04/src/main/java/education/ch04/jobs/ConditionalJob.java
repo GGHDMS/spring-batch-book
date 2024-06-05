@@ -51,11 +51,8 @@ public class ConditionalJob {
     public Job job() {
         return new JobBuilder("conditionalJob", jobRepository)
                 .start(firstStep())
-                .next(decider())
-                .from(decider())
-                .on("FAILED").to(failureStep())
-                .from(decider())
-                .on("*").to(successStep())
+                .on("FAILED").end()
+                .from(firstStep()).on("*").to(successStep())
                 .end()
                 .build();
     }
