@@ -68,9 +68,15 @@ public class FlowJob {
     @Bean
     public Job conditionalStepLogicJob() {
         return new JobBuilder("conditionalStepLogicJob", jobRepository)
-                .start(preProcessingFlow())
+                .start(initializeBatch())
                 .next(runBatch())
-                .end()
+                .build();
+    }
+
+    @Bean
+    public Step initializeBatch() {
+        return new StepBuilder("initalizeBatch", jobRepository)
+                .flow(preProcessingFlow())
                 .build();
     }
 
