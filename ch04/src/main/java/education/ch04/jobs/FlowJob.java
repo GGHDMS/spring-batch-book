@@ -2,11 +2,10 @@ package education.ch04.jobs;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.job.DefaultJobParametersExtractor;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +55,20 @@ public class FlowJob {
         };
     }
 
+/*
     @Bean
     public Flow preProcessingFlow() {
         return new FlowBuilder<Flow>("preProcessingFlow")
+                .start(loadFileStep())
+                .next(loadCustomerStep())
+                .next(updateStartStep())
+                .build();
+    }
+*/
+
+    @Bean
+    public Job preProcessingJob() {
+        return new JobBuilder("preProcessingFlow", jobRepository)
                 .start(loadFileStep())
                 .next(loadCustomerStep())
                 .next(updateStartStep())
@@ -75,8 +85,10 @@ public class FlowJob {
 
     @Bean
     public Step initializeBatch() {
-        return new StepBuilder("initalizeBatch", jobRepository)
-                .flow(preProcessingFlow())
+        return new StepBuilder("initializeBatch", jobRepository)
+//                .flow(preProcessingFlow())
+                .job(preProcessingJob())
+                .parametersExtractor(new DefaultJobParametersExtractor())
                 .build();
     }
 
